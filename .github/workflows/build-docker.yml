@@ -1,0 +1,22 @@
+name: Build OpenClaw Docker
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Build Docker image
+        run: docker build -t openclaw:latest .
+      
+      - name: Save Docker image
+        run: docker save openclaw:latest | gzip > openclaw-docker.tar.gz
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: openclaw-docker
+          path: openclaw-docker.tar.gz
